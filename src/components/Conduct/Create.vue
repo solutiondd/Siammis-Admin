@@ -119,7 +119,8 @@
                 <div class="form-group">
                     <label class="form-label"><span class="icon">⭐</span> คะแนน</label>
                     <div class="input-wrapper">
-                        <input v-model="form.score" type="number" class="input input-bordered" />
+                        <input v-model="form.score" type="number" class="input input-bordered"
+                            @input="handleScoreInput" />
                     </div>
                 </div>
             </div>
@@ -422,6 +423,25 @@ function applyLevelSelection(level) {
     }
 }
 
+function normalizeScoreByType(rawScore) {
+    if (rawScore === '' || rawScore === null || rawScore === undefined) return ''
+    const parsed = Number(rawScore)
+    if (!Number.isFinite(parsed)) return ''
+
+    if (selectedType.value && selectedType.value.name !== 'บำเพ็ญประโยชน์') {
+        return String(-Math.abs(parsed))
+    }
+
+    return String(Math.abs(parsed))
+}
+
+function handleScoreInput() {
+    const normalized = normalizeScoreByType(form.value.score)
+    if (normalized !== '') {
+        form.value.score = normalized
+    }
+}
+
 function selectLevel(level) {
     levelResults.value = [];
     levelDropdownOpen.value = false;
@@ -438,13 +458,19 @@ async function handleSubmit() {
         return
     }
     const description = String(form.value.description || '').trim() || '-'
+    const normalizedScore = normalizeScoreByType(form.value.score)
+    if (normalizedScore === '') {
+        Swal.fire('กรุณากรอกคะแนนให้ถูกต้อง', '', 'warning')
+        return
+    }
+
     const payload = {
         student_id: selectedStudent.value._id,
         behavior_type: selectedType.value.name,
         behavior: selectedBehavior.value.name,
         behavior_level: selectedLevel.value ? selectedLevel.value.level : 1,
         description,
-        score: form.value.score,
+        score: Number(normalizedScore),
     }
     try {
         await conductService.createConduct(payload)
@@ -463,8 +489,15 @@ async function handleSubmit() {
         descriptionDropdownOpen.value = false
         form.value = { description: '', score: '' }
     } catch (e) {
-        const errorMessage = e?.response?.data?.message || e.message || 'บันทึกไม่สำเร็จ'
-        Swal.fire('เกิดข้อผิดพลาด', errorMessage, 'error')
+        const errDetail = e?.response?.data?.error || ''
+        if (errDetail === 'teacher give score reached limit of 10') {
+            Swal.fire('ไม่สามารถบันทึกได้', 'ครูให้คะแนนบวกได้ไม่เกิน 10 คะแนน', 'warning')
+        } else if (errDetail === 'max teacher give score is 10') {
+            Swal.fire('คะแนนเกินกำหนด', 'คะแนนบวกสูงสุดที่ให้ได้คือ 10 คะแนน', 'warning')
+        } else {
+            const errorMessage = e?.response?.data?.message || e.message || 'บันทึกไม่สำเร็จ'
+            Swal.fire('เกิดข้อผิดพลาด', errorMessage, 'error')
+        }
     }
 }
 </script>

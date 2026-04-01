@@ -1,7 +1,15 @@
 <template>
     <div class="max-w-full my-7 mx-auto bg-white rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.08)] p-6">
-        <div v-if="auth.user?.role !== 'teacher'" class="mb-3 flex justify-end">
-            <ExportDocs :studentInfo="studentInfo" :conductList="conductList" />
+        <div class="mb-3 flex justify-end items-center gap-3 flex-wrap">
+            <div v-if="auth.user?.role === 'teacher'" class="flex gap-2 flex-wrap justify-end">
+                <span class="score-badge !py-[4px] !px-[10px] bg-emerald-50 text-emerald-700 cursor-help"
+                    title="คะแนนที่เพิ่มให้นักเรียนคนนี่">ให้แล้ว +{{
+                        teacherGivenScore }}</span>
+                <span class="score-badge !py-[4px] !px-[10px] bg-blue-50 text-blue-700 cursor-help"
+                    title="คะแนนที่ยังสามารถเพิ่มให้นักเรียนคนนี่ได้">คงเหลือ {{ teacherRemainingScore
+                    }}</span>
+            </div>
+            <ExportDocs v-if="auth.user?.role !== 'teacher'" :studentInfo="studentInfo" :conductList="conductList" />
         </div>
         <div v-if="studentInfo"
             class="bg-gray-100 rounded-[10px] py-[14px] px-[18px] mb-[18px] text-[1.08rem] shadow-[0_2px_8px_rgba(0,0,0,0.04)]">
@@ -111,6 +119,22 @@ const isDetailOpen = ref(false)
 const selectedDetail = ref({})
 const currentPage = ref(1)
 const itemsPerPage = 3
+const teacherMaxPositiveScore = 10
+
+const teacherIdFromToken = computed(() => {
+    const token = auth.token || localStorage.getItem('token') || ''
+    if (!token || !token.includes('.')) return ''
+
+    try {
+        const payload = token.split('.')[1]
+        const base64 = payload.replace(/-/g, '+').replace(/_/g, '/')
+        const normalizedBase64 = base64.padEnd(base64.length + ((4 - (base64.length % 4)) % 4), '=')
+        const decoded = JSON.parse(atob(normalizedBase64))
+        return String(decoded?.userid || decoded?._id || decoded?.id || decoded?.sub || '')
+    } catch (_) {
+        return ''
+    }
+})
 
 const totalDeducted = computed(() =>
     conductList.value
@@ -123,6 +147,20 @@ const totalAdded = computed(() =>
         .reduce((sum, i) => sum + Number(i.score), 0)
 )
 const totalNet = computed(() => totalDeducted.value + totalAdded.value)
+
+const teacherGivenScore = computed(() => {
+    if (auth.user?.role !== 'teacher' || !teacherIdFromToken.value) return 0
+
+    return conductList.value
+        .filter(item => String(item?.teacher_id?._id || '') === teacherIdFromToken.value)
+        .filter(item => Number(item?.score) > 0)
+        .reduce((sum, item) => sum + Number(item.score), 0)
+})
+
+const teacherRemainingScore = computed(() => {
+    if (auth.user?.role !== 'teacher') return teacherMaxPositiveScore
+    return Math.max(teacherMaxPositiveScore - teacherGivenScore.value, 0)
+})
 
 const totalPages = computed(() => Math.ceil(conductList.value.length / itemsPerPage))
 

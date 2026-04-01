@@ -27,8 +27,9 @@ async function handlePromote() {
     const { default: Swal } = await import('sweetalert2')
     // Confirm 1
     const confirm1 = await Swal.fire({
-        icon: 'warning',
-        title: 'ยืนยันการเลื่อนชั้นใช่ไหม?',
+                icon: 'warning',
+        title: 'การยืนยันครั้งนี้จะลบชั้น ม.3 และ ม.6 ออกทุกห้อง',
+        text: 'ยืนยันใช่ไหม?',
         showCancelButton: true,
         confirmButtonText: 'ยืนยัน',
         cancelButtonText: 'ยกเลิก',
@@ -43,8 +44,7 @@ async function handlePromote() {
     // Confirm 2
     const confirm2 = await Swal.fire({
         icon: 'warning',
-        title: 'การยืนยันครั้งนี้จะลบชั้น ม.3 และ ม.6 ออกทุกห้อง',
-        text: 'ยืนยันใช่ไหม?',
+        title: 'ยืนยันการเลื่อนชั้นใช่ไหม?',
         showCancelButton: true,
         confirmButtonText: 'ยืนยัน',
         cancelButtonText: 'ยกเลิก',
@@ -57,20 +57,20 @@ async function handlePromote() {
     if (!confirm2.isConfirmed) return
 
     // Confirm 3
-    const confirm3 = await Swal.fire({
-        icon: 'warning',
-        title: 'การยืนยันครั้งนี้จะลบนักเรียนชั้น ม.3 และ ม.6 ทุกห้องออกด้วย',
-        text: 'ยืนยันการลบใช่หรือไหม?',
-        showCancelButton: true,
-        confirmButtonText: 'ยืนยัน',
-        cancelButtonText: 'ยกเลิก',
-        confirmButtonColor: '#2563eb',
-        cancelButtonColor: '#d33',
-        didOpen: () => {
-            document.getElementById('app').removeAttribute('aria-hidden')
-        }
-    })
-    if (!confirm3.isConfirmed) return
+    // const confirm3 = await Swal.fire({
+    //     icon: 'warning',
+    //     title: 'การยืนยันครั้งนี้จะลบนักเรียนชั้น ม.3 และ ม.6 ทุกห้องออกด้วย',
+    //     text: 'ยืนยันการลบใช่หรือไหม?',
+    //     showCancelButton: true,
+    //     confirmButtonText: 'ยืนยัน',
+    //     cancelButtonText: 'ยกเลิก',
+    //     confirmButtonColor: '#2563eb',
+    //     cancelButtonColor: '#d33',
+    //     didOpen: () => {
+    //         document.getElementById('app').removeAttribute('aria-hidden')
+    //     }
+    // })
+    if (!confirm2.isConfirmed) return
 
     loading.value = true
     try {

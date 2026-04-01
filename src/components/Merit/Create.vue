@@ -11,12 +11,12 @@
                             d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
-                <h3 class="text-lg font-bold mb-4 text-primary">เพิ่มประเภทความดี</h3>
+                <h3 class="text-lg font-bold mb-4 text-primary">เพิ่มรายการ</h3>
                 <form @submit.prevent="handleSubmit">
                     <div class="mb-4">
-                        <label class="block text-sm font-medium mb-1">ชื่อประเภทความดี</label>
+                        <label class="block text-sm font-medium mb-1">ชื่อรายการ</label>
                         <input v-model="form.name" type="text" class="input input-bordered w-full"
-                            placeholder="กรอกชื่อประเภท..." required />
+                            placeholder="กรอกชื่อ..." required />
                     </div>
                     <div class="mb-4">
                         <label class="block text-sm font-medium mb-1">คะแนน</label>

@@ -21,6 +21,7 @@ const Holidays = () => import("../views/Admin/Holidays.vue");
 const Behavior = () => import("../views/Admin/Behavior.vue");
 const Conduct = () => import("../views/Admin/Conduct.vue");
 const AtRisk = () => import("../views/Admin/report/AtRisk.vue");
+const AcademicCalendar = () => import("../views/Admin/Academiccalendar.vue");
 
 const routes = [
   { path: "/", name: "login", component: Login },
@@ -124,6 +125,11 @@ const routes = [
         path: "report/at-risk",
         name: "AtRisk",
         component: AtRisk,
+      },
+      {
+        path: "academiccalendar",
+        name: "AcademicCalendar",
+        component: AcademicCalendar,
       },
     ],
   },

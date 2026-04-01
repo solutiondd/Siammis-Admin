@@ -7,7 +7,7 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                 </svg>
             </button>
-            <h3 class="text-lg font-bold mb-4">แก้ไขประเภทความดี</h3>
+            <h3 class="text-lg font-bold mb-4">แก้ไขรายการ</h3>
             <form @submit.prevent="handleSubmit">
                 <div class="mb-4">
                     <label class="block text-sm font-medium mb-1">ชื่อรายการ</label>

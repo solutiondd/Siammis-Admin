@@ -49,130 +49,199 @@
 
         <!-- Modal 2: เลือกหัวข้อความผิด -->
         <div v-if="showMisconductModal" class="modal modal-open">
-            <div class="modal-box max-w-md">
-                <h3 class="font-bold text-lg mb-4">ประพฤติผิดระเบียบของโรงเรียน ในเรื่อง</h3>
-                <div v-if="misconductDocType !== 'จค.กก 4' && misconductDocType !== 'จค.กก 5'"
-                    class="flex flex-col gap-1 max-h-64 overflow-y-auto pr-1">
-                    <label v-for="(item, idx) in categoryDefinitions" :key="item.label"
-                        class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-base-200">
-                        <input type="checkbox" :value="item.label" v-model="misconductChecked"
-                            class="checkbox checkbox-primary checkbox-sm" />
-                        <span>{{ idx + 1 }}. {{ item.label }}</span>
-                    </label>
-                </div>
-                <div v-if="misconductDocType !== 'จค.กก 4' && misconductDocType !== 'จค.กก 5'" class="mt-4">
-                    <label class="text-sm font-medium">อื่น ๆ ( ไม่จำเป็น )</label>
-                    <input type="text" v-model="othersText" class="input input-bordered input-sm w-full mt-1"
-                        placeholder="ระบุเพิ่มเติม" />
-                </div>
-                <div class="mt-4">
-                    <label class="text-sm font-medium">วันที่เอกสาร</label>
-                    <input type="date" v-model="documentDateStr" class="input input-bordered input-sm w-full mt-1" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 1'" class="mt-4">
-                    <label class="text-sm font-medium">ต้องการภายในวันที่</label>
-                    <input type="date" v-model="deadlineDateStr" class="input input-bordered input-sm w-full mt-1" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 1/1'" class="mt-4">
-                    <label class="text-sm font-medium">วันที่เกิดเหตุ / เวลาเกิดเหตุ</label>
-                    <div class="flex gap-2">
-                        <input type="date" v-model="incidentDateStr" class="input input-bordered input-sm w-full"
-                            style="max-width: 60%" />
-                        <input type="time" v-model="incidentTimeStr" class="input input-bordered input-sm w-full"
-                            style="max-width: 40%" />
+            <div :class="['modal-box p-0 overflow-hidden transition-all', showLivePreview ? 'max-w-5xl' : 'max-w-md']">
+                <div class="flex">
+                    <!-- Form column -->
+                    <div class="flex-1 min-w-0 p-6 overflow-y-auto max-h-[85vh]">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-lg">ประพฤติผิดระเบียบของโรงเรียน ในเรื่อง</h3>
+                            <button class="btn btn-xs btn-ghost gap-1 hidden lg:inline-flex"
+                                @click="showLivePreview = !showLivePreview" title="เปิด/ปิด ตัวอย่าง">
+                                <svg v-if="showLivePreview" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4"
+                                    fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+                                </svg>
+                                <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none"
+                                    viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                <!-- {{ showLivePreview ? 'ซ่อนตัวอย่าง' : 'แสดงตัวอย่าง' }} -->
+                            </button>
+                            <button class="btn btn-xs btn-ghost gap-1 lg:hidden" @click="showMobilePreviewModal = true"
+                                title="ดูตัวอย่างเอกสาร">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24"
+                                    stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                </svg>
+                                ดูตัวอย่าง
+                            </button>
+                        </div>
+                        <div v-if="misconductDocType !== 'จค.กก 4' && misconductDocType !== 'จค.กก 5'"
+                            class="flex flex-col gap-1 max-h-64 overflow-y-auto pr-1">
+                            <label v-for="(item, idx) in categoryDefinitions" :key="item.label"
+                                class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-base-200">
+                                <input type="checkbox" :value="item.label" v-model="misconductChecked"
+                                    class="checkbox checkbox-primary checkbox-sm" />
+                                <span>{{ idx + 1 }}. {{ item.label }}</span>
+                            </label>
+                        </div>
+                        <div v-if="misconductDocType !== 'จค.กก 4' && misconductDocType !== 'จค.กก 5'" class="mt-4">
+                            <label class="text-sm font-medium">อื่น ๆ ( ไม่จำเป็น )</label>
+                            <input type="text" v-model="othersText" class="input input-bordered input-sm w-full mt-1"
+                                placeholder="ระบุเพิ่มเติม" />
+                        </div>
+                        <div class="mt-4">
+                            <label class="text-sm font-medium">วันที่เอกสาร</label>
+                            <input type="date" v-model="documentDateStr"
+                                class="input input-bordered input-sm w-full mt-1" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 1'" class="mt-4">
+                            <label class="text-sm font-medium">ต้องการภายในวันที่</label>
+                            <input type="date" v-model="deadlineDateStr"
+                                class="input input-bordered input-sm w-full mt-1" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 1/1'" class="mt-4">
+                            <label class="text-sm font-medium">วันที่เกิดเหตุ / เวลาเกิดเหตุ</label>
+                            <div class="flex gap-2">
+                                <input type="date" v-model="incidentDateStr"
+                                    class="input input-bordered input-sm w-full" style="max-width: 60%" />
+                                <input type="time" v-model="incidentTimeStr"
+                                    class="input input-bordered input-sm w-full" style="max-width: 40%" />
+                            </div>
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 1/1'" class="mt-4">
+                            <label class="text-sm font-medium">สถานที่เกิดเหตุ</label>
+                            <input type="text" v-model="incidentLocation"
+                                class="input input-bordered input-sm w-full mt-1" placeholder="ระบุสถานที่เกิดเหตุ" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 2'" class="mt-4">
+                            <label class="text-sm font-medium">หมวดความผิดระเบียบวินัยสถานศึกษา</label>
+                            <select v-model="selectedBehaviorTypeId"
+                                class="select select-bordered select-sm w-full mt-1">
+                                <option disabled value="">เลือกประเภทพฤติกรรม</option>
+                                <option v-for="item in behaviorTypeOptions" :key="item._id" :value="item._id">{{
+                                    item.name }}
+                                </option>
+                            </select>
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 2'" class="mt-4">
+                            <label class="text-sm font-medium">นักเรียนทำผิดเป็นครั้งที่</label>
+                            <input type="number" min="1" v-model="offenseCount"
+                                class="input input-bordered input-sm w-full mt-1" placeholder="ระบุจำนวนครั้ง" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 2'" class="mt-4">
+                            <label class="text-sm font-medium">การพิจารณาการลงโทษของกลุ่มบริหารกิจการนักเรียน</label>
+                            <div class="flex flex-col gap-1 mt-2">
+                                <label v-for="item in punishmentOptions" :key="item"
+                                    class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-base-200">
+                                    <input type="checkbox" :value="item" v-model="punishmentChecked"
+                                        class="checkbox checkbox-primary checkbox-sm" />
+                                    <span>{{ item }}</span>
+                                </label>
+                            </div>
+                            <div v-if="punishmentChecked.includes('หักคะแนนความประพฤติ')" class="mt-3">
+                                <label class="text-sm font-medium">คะแนนที่จะหัก</label>
+                                <input type="number" min="1" v-model="punishmentScore"
+                                    class="input input-bordered input-sm w-full mt-1" placeholder="ระบุคะแนน" />
+                            </div>
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 4'" class="mt-4">
+                            <label class="text-sm font-medium">ประพฤติผิดระเบียบวินัยของโรงเรียนดังนี้</label>
+                            <textarea v-model="doc4MisconductText"
+                                class="textarea textarea-bordered textarea-sm w-full mt-1" rows="3"
+                                placeholder="พิมพ์รายละเอียด"></textarea>
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 4'" class="mt-4">
+                            <label class="text-sm font-medium">วันและเวลานัดพบที่โรงเรียน</label>
+                            <div class="flex gap-2 mt-1">
+                                <input type="date" v-model="meetingDateStr" class="input input-bordered input-sm w-full"
+                                    style="max-width: 60%" />
+                                <input type="time" v-model="meetingTimeStr" class="input input-bordered input-sm w-full"
+                                    style="max-width: 40%" />
+                            </div>
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
+                            <label class="text-sm font-medium">ชื่อผู้ปกครอง</label>
+                            <input type="text" v-model="doc5GuardianName"
+                                class="input input-bordered input-sm w-full mt-1" placeholder="เว้นว่างได้" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
+                            <label class="text-sm font-medium">ปัจจุบันที่อยู่</label>
+                            <input type="text" v-model="doc5CurrentAddress"
+                                class="input input-bordered input-sm w-full mt-1" placeholder="เว้นว่างได้" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
+                            <label class="text-sm font-medium">หมายเลขโทรศัพท์</label>
+                            <input type="text" v-model="doc5Phone" class="input input-bordered input-sm w-full mt-1"
+                                placeholder="เว้นว่างได้" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
+                            <label class="text-sm font-medium">เกี่ยวข้องกับนักเรียนเป็น</label>
+                            <input type="text" v-model="doc5Relation" class="input input-bordered input-sm w-full mt-1"
+                                placeholder="เว้นว่างได้" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
+                            <label class="text-sm font-medium">จะควบคุมดูแลและกวดขันให้...</label>
+                            <input type="text" v-model="doc5StudentCareName"
+                                class="input input-bordered input-sm w-full mt-1" placeholder="เว้นว่างได้" />
+                        </div>
+                        <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
+                            <label class="text-sm font-medium">ประพฤติผิดทำนองนี้อีกจะดำเนินการดังนี้</label>
+                            <div class="flex flex-col gap-1 mt-2">
+                                <label v-for="item in doc5ActionOptions" :key="item"
+                                    class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-base-200">
+                                    <input type="checkbox" :value="item" v-model="doc5ActionChecked"
+                                        class="checkbox checkbox-primary checkbox-sm" />
+                                    <span>{{ item }}</span>
+                                </label>
+                            </div>
+                        </div>
+                        <p v-if="misconductValidationMsg" class="text-error text-sm mt-2">{{ misconductValidationMsg }}
+                        </p>
+                        <div class="modal-action">
+                            <button class="btn btn-ghost btn-sm" @click="cancelMisconduct">ยกเลิก</button>
+                            <button class="btn btn-primary btn-sm" @click="confirmMisconduct">ยืนยัน</button>
+                        </div>
                     </div>
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 1/1'" class="mt-4">
-                    <label class="text-sm font-medium">สถานที่เกิดเหตุ</label>
-                    <input type="text" v-model="incidentLocation" class="input input-bordered input-sm w-full mt-1"
-                        placeholder="ระบุสถานที่เกิดเหตุ" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 2'" class="mt-4">
-                    <label class="text-sm font-medium">หมวดความผิดระเบียบวินัยสถานศึกษา</label>
-                    <select v-model="selectedBehaviorTypeId" class="select select-bordered select-sm w-full mt-1">
-                        <option disabled value="">เลือกประเภทพฤติกรรม</option>
-                        <option v-for="item in behaviorTypeOptions" :key="item._id" :value="item._id">{{ item.name }}
-                        </option>
-                    </select>
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 2'" class="mt-4">
-                    <label class="text-sm font-medium">นักเรียนทำผิดเป็นครั้งที่</label>
-                    <input type="number" min="1" v-model="offenseCount"
-                        class="input input-bordered input-sm w-full mt-1" placeholder="ระบุจำนวนครั้ง" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 2'" class="mt-4">
-                    <label class="text-sm font-medium">การพิจารณาการลงโทษของกลุ่มบริหารกิจการนักเรียน</label>
-                    <div class="flex flex-col gap-1 mt-2">
-                        <label v-for="item in punishmentOptions" :key="item"
-                            class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-base-200">
-                            <input type="checkbox" :value="item" v-model="punishmentChecked"
-                                class="checkbox checkbox-primary checkbox-sm" />
-                            <span>{{ item }}</span>
-                        </label>
+                    <!-- Live Preview Panel -->
+                    <div v-if="showLivePreview"
+                        class="hidden lg:block w-[340px] shrink-0 bg-base-200 border-l border-base-300 p-4 overflow-y-auto max-h-[85vh]">
+                        <div class="flex items-center gap-2 mb-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-base-content/50" fill="none"
+                                viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            <p class="font-semibold text-sm text-base-content/60">ตัวอย่างเอกสาร</p>
+                        </div>
+                        <div class="bg-white border border-base-300 rounded-lg p-4 shadow-sm"
+                            v-html="liveDocumentPreview"></div>
                     </div>
-                    <div v-if="punishmentChecked.includes('หักคะแนนความประพฤติ')" class="mt-3">
-                        <label class="text-sm font-medium">คะแนนที่จะหัก</label>
-                        <input type="number" min="1" v-model="punishmentScore"
-                            class="input input-bordered input-sm w-full mt-1" placeholder="ระบุคะแนน" />
-                    </div>
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 4'" class="mt-4">
-                    <label class="text-sm font-medium">ประพฤติผิดระเบียบวินัยของโรงเรียนดังนี้</label>
-                    <textarea v-model="doc4MisconductText" class="textarea textarea-bordered textarea-sm w-full mt-1"
-                        rows="3" placeholder="พิมพ์รายละเอียด"></textarea>
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 4'" class="mt-4">
-                    <label class="text-sm font-medium">วันและเวลานัดพบที่โรงเรียน</label>
-                    <div class="flex gap-2 mt-1">
-                        <input type="date" v-model="meetingDateStr" class="input input-bordered input-sm w-full"
-                            style="max-width: 60%" />
-                        <input type="time" v-model="meetingTimeStr" class="input input-bordered input-sm w-full"
-                            style="max-width: 40%" />
-                    </div>
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
-                    <label class="text-sm font-medium">ชื่อผู้ปกครอง</label>
-                    <input type="text" v-model="doc5GuardianName" class="input input-bordered input-sm w-full mt-1"
-                        placeholder="เว้นว่างได้" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
-                    <label class="text-sm font-medium">ปัจจุบันที่อยู่</label>
-                    <input type="text" v-model="doc5CurrentAddress" class="input input-bordered input-sm w-full mt-1"
-                        placeholder="เว้นว่างได้" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
-                    <label class="text-sm font-medium">หมายเลขโทรศัพท์</label>
-                    <input type="text" v-model="doc5Phone" class="input input-bordered input-sm w-full mt-1"
-                        placeholder="เว้นว่างได้" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
-                    <label class="text-sm font-medium">เกี่ยวข้องกับนักเรียนเป็น</label>
-                    <input type="text" v-model="doc5Relation" class="input input-bordered input-sm w-full mt-1"
-                        placeholder="เว้นว่างได้" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
-                    <label class="text-sm font-medium">จะควบคุมดูแลและกวดขันให้...</label>
-                    <input type="text" v-model="doc5StudentCareName" class="input input-bordered input-sm w-full mt-1"
-                        placeholder="เว้นว่างได้" />
-                </div>
-                <div v-if="misconductDocType === 'จค.กก 5'" class="mt-4">
-                    <label class="text-sm font-medium">ประพฤติผิดทำนองนี้อีกจะดำเนินการดังนี้</label>
-                    <div class="flex flex-col gap-1 mt-2">
-                        <label v-for="item in doc5ActionOptions" :key="item"
-                            class="flex items-center gap-3 cursor-pointer p-2 rounded-lg hover:bg-base-200">
-                            <input type="checkbox" :value="item" v-model="doc5ActionChecked"
-                                class="checkbox checkbox-primary checkbox-sm" />
-                            <span>{{ item }}</span>
-                        </label>
-                    </div>
-                </div>
-                <p v-if="misconductValidationMsg" class="text-error text-sm mt-2">{{ misconductValidationMsg }}</p>
-                <div class="modal-action">
-                    <button class="btn btn-ghost btn-sm" @click="cancelMisconduct">ยกเลิก</button>
-                    <button class="btn btn-primary btn-sm" @click="confirmMisconduct">ยืนยัน</button>
                 </div>
             </div>
             <div class="modal-backdrop" @click="cancelMisconduct"></div>
+        </div>
+
+        <!-- Mobile Preview Popup -->
+        <div v-if="showMisconductModal && showMobilePreviewModal" class="modal modal-open lg:hidden">
+            <div class="modal-box max-w-md max-h-[85vh] overflow-y-auto">
+                <h3 class="font-bold text-lg mb-3">ตัวอย่างเอกสาร</h3>
+                <div class="bg-white border border-base-300 rounded-lg p-4 shadow-sm" v-html="liveDocumentPreview">
+                </div>
+                <div class="modal-action">
+                    <button class="btn btn-primary btn-sm" @click="showMobilePreviewModal = false">ปิด</button>
+                </div>
+            </div>
+            <div class="modal-backdrop" @click="showMobilePreviewModal = false"></div>
         </div>
     </div>
 </template>
@@ -239,6 +308,8 @@ const incidentLocation = ref('')
 const misconductValidationMsg = ref('')
 const showTemplateModal = ref(false)
 const previewDocType = ref('')
+const showLivePreview = ref(true)
+const showMobilePreviewModal = ref(false)
 const behaviorService = new BehaviorService()
 let resolveDocType = null
 let resolveMisconduct = null
@@ -315,6 +386,7 @@ function openMisconductModal(initialChecked, options = {}) {
     incidentTimeStr.value = options.defaultIncidentTime || ''
     incidentLocation.value = options.defaultIncidentLocation || ''
     misconductValidationMsg.value = ''
+    showMobilePreviewModal.value = false
     showMisconductModal.value = true
     return new Promise((resolve) => { resolveMisconduct = resolve })
 }
@@ -351,6 +423,7 @@ function confirmMisconduct() {
         misconductValidationMsg.value = 'กรุณาระบุคะแนนที่จะหัก'
         return
     }
+    showMobilePreviewModal.value = false
     showMisconductModal.value = false
     resolveMisconduct?.({
         checkedLabels: new Set(misconductChecked.value),
@@ -377,6 +450,7 @@ function confirmMisconduct() {
     })
 }
 function cancelMisconduct() {
+    showMobilePreviewModal.value = false
     showMisconductModal.value = false
     resolveMisconduct?.(null)
 }
@@ -394,6 +468,155 @@ function closeTemplatePreview() {
 const misconductList = computed(() =>
     (props.conductList || []).filter(item => item.behavior_type !== 'บำเพ็ญประโยชน์')
 )
+
+const liveDocumentPreview = computed(() => {
+    const doc = misconductDocType.value
+    const studentName = props.studentInfo?.name || '(ชื่อนักเรียน)'
+    const studentId = props.studentInfo?.userid || '........'
+    const className = `${props.studentInfo?.grade || 'ม....'} / ${props.studentInfo?.classroom || '....'}`
+    const esc = (s) => String(s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+    const mark = (label) => misconductChecked.value.includes(label) ? '☑' : '☐'
+    const punishMark = (label) => punishmentChecked.value.includes(label) ? '☑' : '☐'
+    const actionMark = (label) => doc5ActionChecked.value.includes(label) ? '☑' : '☐'
+    const formatDate = (dateStr) => {
+        if (!dateStr) return '__ / __ / __'
+        const d = new Date(`${dateStr}T00:00:00`)
+        if (isNaN(d.getTime())) return '__ / __ / __'
+        const thaiMonths = ['ม.ค.', 'ก.พ.', 'มี.ค.', 'เม.ย.', 'พ.ค.', 'มิ.ย.', 'ก.ค.', 'ส.ค.', 'ก.ย.', 'ต.ค.', 'พ.ย.', 'ธ.ค.']
+        return `${d.getDate()} ${thaiMonths[d.getMonth()]} ${d.getFullYear() + 543}`
+    }
+    const allLabels = categoryDefinitions.map(c => c.label)
+
+    if (doc === 'จค.กก 1') {
+        return `
+            <div class="text-xs leading-5">
+                <div class="text-center mb-3 pb-2 border-b">
+                    <p class="font-bold">โรงเรียนจักรคำคณาทร</p>
+                    <p class="text-gray-400">หนังสือแจ้งนักเรียนประพฤติผิดระเบียบ (จค.กก 1)</p>
+                </div>
+                <p class="mb-1 border-t border-b py-1"><strong>วันที่:</strong> ${formatDate(documentDateStr.value)}</p>
+                <p class="mb-1 mt-2">เรียน ครูที่ปรึกษา นักเรียน <strong class="text-blue-600">${esc(studentName)}</strong></p>
+                <p class="mb-2">ชั้น <strong class="text-blue-600">${esc(className)}</strong> เลขประจำตัว <strong class="text-blue-600">${esc(studentId)}</strong></p>
+                <p class="mb-1">ประพฤติผิดระเบียบของโรงเรียน ในเรื่อง</p>
+                <div class="ml-3 mb-2">
+                    ${allLabels.map(l => `<p>${mark(l)} ${l}</p>`).join('')}
+                    ${othersText.value.trim() ? `<p>☑ อื่น ๆ: <span class="text-blue-600">${esc(othersText.value)}</span></p>` : '<p>☐ อื่น ๆ</p>'}
+                </div>
+                <p class="mb-2"><strong>ต้องการภายในวันที่:</strong> <span class="text-blue-600">${formatDate(deadlineDateStr.value)}</span></p>
+                <p>จึงมีหนังสือแจ้งเตือนนี้ เพื่อให้ทราบและได้จัดการ</p>
+                <div class="mt-4 pt-2 border-t">
+                    <p>ลงชื่อ .............................</p>
+                    <p class="text-gray-400">(เจ้าหน้าที่ส่งเสริมความประพฤติ)</p>
+                </div>
+            </div>`
+    }
+    if (doc === 'จค.กก 1/1') {
+        return `
+            <div class="text-xs leading-5">
+                <div class="text-center mb-3 pb-2 border-b">
+                    <p class="font-bold">โรงเรียนจักรคำคณาทร</p>
+                    <p class="text-gray-400">แบบบันทึกการสอบสวน (จค.กก 1/1)</p>
+                </div>
+                <p class="mb-1">นักเรียน <strong class="text-blue-600">${esc(studentName)}</strong></p>
+                <p class="mb-2">ชั้น <strong class="text-blue-600">${esc(className)}</strong> เลขประจำตัว <strong class="text-blue-600">${esc(studentId)}</strong></p>
+                <div class="ml-3 mb-2">
+                    <p>ได้กระทำผิด:</p>
+                    ${allLabels.map(l => `<p>${mark(l)} ${l}</p>`).join('')}
+                    ${othersText.value.trim() ? `<p>☑ อื่น ๆ: <span class="text-blue-600">${esc(othersText.value)}</span></p>` : '<p>☐ อื่น ๆ</p>'}
+                </div>
+                <p class="mb-1"><strong>วันที่เกิดเหตุ:</strong> <span class="text-blue-600">${formatDate(incidentDateStr.value)}</span> เวลา <span class="text-blue-600">${incidentTimeStr.value || '__ : __'}</span></p>
+                <p class="mb-2"><strong>สถานที่เกิดเหตุ:</strong> <span class="text-blue-600">${esc(incidentLocation.value) || '..........................'}</span></p>
+                <p>การกระทำของข้าพเจ้า เป็นการกระทำที่ไม่ถูกต้อง</p>
+                <p>ข้าพเจ้ายินดีให้ทางโรงเรียนพิจารณาโทษได้ทุกกรณี</p>
+                <div class="mt-4 pt-2 border-t">
+                    <p>ลงชื่อ .............................</p>
+                    <p class="text-gray-400">(เจ้าหน้าที่ส่งเสริมความประพฤติ)</p>
+                </div>
+            </div>`
+    }
+    if (doc === 'จค.กก 2') {
+        const behaviorName = esc(getBehaviorTypeNameById(selectedBehaviorTypeId.value)) || '................................'
+        return `
+            <div class="text-xs leading-5">
+                <div class="text-center mb-3 pb-2 border-b">
+                    <p class="font-bold">โรงเรียนจักรคำคณาทร</p>
+                    <p class="text-gray-400">หนังสือการพิจารณาการลงโทษ (จค.กก 2)</p>
+                </div>
+                <p class="mb-1">เรียน ผู้อำนวยการโรงเรียน</p>
+                <p class="mb-2">นักเรียน <strong class="text-blue-600">${esc(studentName)}</strong> ชั้น <strong class="text-blue-600">${esc(className)}</strong></p>
+                <div class="ml-3 mb-2">
+                    <p>ได้กระทำผิด:</p>
+                    ${allLabels.map(l => `<p>${mark(l)} ${l}</p>`).join('')}
+                    ${othersText.value.trim() ? `<p>☑ อื่น ๆ: <span class="text-blue-600">${esc(othersText.value)}</span></p>` : '<p>☐ อื่น ๆ</p>'}
+                </div>
+                <p class="mb-1">กลุ่มบริหารกิจการนักเรียนได้พิจารณาแล้ว</p>
+                <div class="ml-3 mb-2">
+                    <p><strong>ประเภทพฤติกรรม:</strong> <span class="text-blue-600">${behaviorName}</span></p>
+                    <p><strong>เป็นครั้งที่:</strong> <span class="text-blue-600">${esc(offenseCount.value) || '__'}</span></p>
+                    <p><strong>การลงโทษ:</strong></p>
+                    ${punishmentOptions.map(l => `<p>${punishMark(l)} ${l}${l === 'หักคะแนนความประพฤติ' && punishmentChecked.value.includes(l) ? ` <span class="text-blue-600">${esc(punishmentScore.value) || '__'}</span> คะแนน` : ''}</p>`).join('')}
+                </div>
+                <div class="mt-4 pt-2 border-t">
+                    <p>ลงชื่อ .............................</p>
+                    <p class="text-gray-400">(รองผู้อำนวยการกลุ่มบริหารกิจการนักเรียน)</p>
+                </div>
+            </div>`
+    }
+    if (doc === 'จค.กก 4') {
+        return `
+            <div class="text-xs leading-5">
+                <div class="text-center mb-3 pb-2 border-b">
+                    <p class="font-bold">โรงเรียนจักรคำคณาทร</p>
+                    <p class="text-gray-400">หนังสือเชิญผู้ปกครองมารับทราบ (จค.กก 4)</p>
+                </div>
+                <p class="mb-1">เรียน ผู้ปกครอง/ผู้อุปการะของ</p>
+                <p class="mb-2">นักเรียน <strong class="text-blue-600">${esc(studentName)}</strong> ชั้น <strong class="text-blue-600">${esc(className)}</strong></p>
+                <p class="mb-1">นักเรียนดังกล่าวได้ประพฤติผิดระเบียบวินัยของโรงเรียน ดังนี้:</p>
+                <div class="ml-3 mb-2 border-l-2 border-blue-300 pl-2">
+                    <p class="text-blue-600">${esc(doc4MisconductText.value) || '.................................................................................'}</p>
+                </div>
+                <p class="mb-1"><strong>ขอให้มานัดพบที่โรงเรียน</strong></p>
+                <p>วันที่ <span class="text-blue-600">${formatDate(meetingDateStr.value)}</span> เวลา <span class="text-blue-600">${meetingTimeStr.value || '__ : __'}</span> น.</p>
+                <p class="mb-2">ณ สำนักงานกลุ่มบริหารกิจการนักเรียน</p>
+                <div class="mt-4 pt-2 border-t">
+                    <p>ลงชื่อ .............................</p>
+                    <p class="text-gray-400">(เจ้าหน้าที่ส่งเสริมความประพฤติ)</p>
+                </div>
+            </div>`
+    }
+    if (doc === 'จค.กก 5') {
+        return `
+            <div class="text-xs leading-5">
+                <div class="text-center mb-3 pb-2 border-b">
+                    <p class="font-bold">โรงเรียนจักรคำคณาทร</p>
+                    <p class="text-gray-400">หนังสือทัณฑ์บน (จค.กก 5)</p>
+                </div>
+                <div class="border-t border-b py-1 mb-2">
+                    <p>วันที่ ${formatDate(documentDateStr.value)}</p>
+                </div>
+                <p class="mb-1">ชื่อ ผู้ปกครอง: <span class="text-blue-600">${esc(doc5GuardianName.value) || '.....................................................'}</span></p>
+                <p class="mb-2">นักเรียน <strong class="text-blue-600">${esc(studentName)}</strong> ชั้น <strong class="text-blue-600">${esc(className)}</strong></p>
+                <div class="ml-3 mb-2">
+                    <p><strong>ที่อยู่:</strong> <span class="text-blue-600">${esc(doc5CurrentAddress.value) || '...................................................'}</span></p>
+                    <p><strong>โทรศัพท์:</strong> <span class="text-blue-600">${esc(doc5Phone.value) || '............................'}</span></p>
+                    <p><strong>เกี่ยวข้องกับนักเรียนเป็น:</strong> <span class="text-blue-600">${esc(doc5Relation.value) || '............................'}</span></p>
+                </div>
+                <p class="mb-1">จะควบคุมดูแล <span class="text-blue-600">${esc(doc5StudentCareName.value) || '........................................'}</span></p>
+                <p class="mb-1">หากปรากฏว่านักเรียนประพฤติผิดทำนองนี้อีก:</p>
+                <div class="ml-3 mb-2">
+                    ${doc5ActionOptions.map(l => `<p>${actionMark(l)} ${l}</p>`).join('')}
+                </div>
+                <div class="mt-4 pt-2 border-t">
+                    <p>ลงชื่อ .............. ผู้ปกครอง</p>
+                    <p>ลงชื่อ .............. นักเรียน</p>
+                    <p>ลงชื่อ .............. ครูที่ปรึกษา</p>
+                    <p>ลงชื่อ .............. เจ้าหน้าที่</p>
+                    <p>ลงชื่อ .............. รองผู้อำนวยการ</p>
+                </div>
+            </div>`
+    }
+    return '<p class="text-gray-400 text-xs">ไม่มีข้อมูลตัวอย่าง</p>'
+})
 
 const documentTemplatePreview = computed(() => {
     const doc = previewDocType.value
