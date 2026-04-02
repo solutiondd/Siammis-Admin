@@ -439,7 +439,7 @@ const isPersonnelActive = computed(() => {
 })
 
 const isStructureActive = computed(() => {
-    return route.path === '/home/department' || route.path === '/home/position' || route.path === '/home/classroom'
+    return route.path === '/home/department' || route.path === '/home/position' || route.path === '/home/classroom' || route.path === '/home/holidays' || route.path === '/home/academiccalendar'
 })
 
 const isEquipmentActive = computed(() => {
@@ -447,7 +447,7 @@ const isEquipmentActive = computed(() => {
 })
 
 const isReportActive = computed(() => {
-    return route.path === '/home/report' || route.path === '/home/report/late' || route.path === '/home/report/missed' || route.path === '/home/report/stranger' || route.path === '/home/report/stats'
+    return route.path === '/home/report' || route.path === '/home/report/late' || route.path === '/home/report/missed' || route.path === '/home/report/stranger' || route.path === '/home/report/at-risk' || route.path === '/home/report/stats'
 })
 
 const submenuClass = (path) => {
@@ -495,7 +495,7 @@ const handleMouseLeave = () => {
 
 const isBehaviorMenuOpen = ref(false)
 const isBehaviorMenuActive = computed(() => {
-    return route.path === '/home/behavior'
+    return route.path === '/home/behavior' || route.path === '/home/conduct'
 })
 const toggleBehaviorMenu = () => {
     isBehaviorMenuOpen.value = !isBehaviorMenuOpen.value
