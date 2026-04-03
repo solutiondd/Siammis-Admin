@@ -54,7 +54,7 @@
                                 <td class="text-center">{{ item.position }}</td>
                                 <td class="text-center">
                                     <span v-if="item.position === 'นักเรียน'">{{ item.grade }}/{{ item.classroom
-                                    }}</span>
+                                        }}</span>
                                     <span v-else>-</span>
                                 </td>
                                 <td class="text-center">{{ formatDate(item.late_dates[0].date) }}</td>
@@ -90,7 +90,7 @@
                                                     <div
                                                         class="bg-neutral text-neutral-content w-14 h-14 rounded flex items-center justify-center">
                                                         <span class="text-base font-bold">{{ getInitials(item.name)
-                                                            }}</span>
+                                                        }}</span>
                                                     </div>
                                                 </div>
                                             </template>
@@ -138,7 +138,7 @@
                                                         <div
                                                             class="bg-neutral text-neutral-content w-14 h-14 rounded flex items-center justify-center">
                                                             <span class="text-base font-bold">{{ getInitials(item.name)
-                                                            }}</span>
+                                                                }}</span>
                                                         </div>
                                                     </div>
                                                 </template>
@@ -501,10 +501,10 @@ const selectedImageType = ref('snap')
 function formatDate(dateStr) {
     if (!dateStr) return '-'
     const date = new Date(dateStr)
-    return date.toLocaleDateString('th-TH', {
+    return date.toLocaleDateString('th-TH-u-ca-buddhist', {
         year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
+        month: 'short',
+        day: 'numeric'
     })
 }
 

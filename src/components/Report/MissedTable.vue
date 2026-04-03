@@ -48,7 +48,7 @@
                         <td class="text-center align-center">{{ group[0].position }}</td>
                         <td class="text-center align-center">
                             <span v-if="group[0].position === 'นักเรียน'">{{ group[0].grade }}/{{ group[0].classroom
-                                }}</span>
+                            }}</span>
                             <span v-else>{{ group[0].department || '-' }}</span>
                         </td>
                         <td class="text-center">{{ formatDate(group[0].missed_date) }}</td>
@@ -272,10 +272,10 @@ function openDetail(student) {
 function formatDate(dateStr) {
     if (!dateStr) return '-';
     const date = new Date(dateStr);
-    return date.toLocaleDateString('th-TH', {
+    return date.toLocaleDateString('th-TH-u-ca-buddhist', {
         year: 'numeric',
-        month: '2-digit',
-        day: '2-digit'
+        month: 'short',
+        day: 'numeric'
     });
 }
 

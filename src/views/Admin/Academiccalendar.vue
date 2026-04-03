@@ -5,7 +5,7 @@
             <div class="flex gap-2 items-center w-full sm:w-auto">
                 <select v-model="selectedYear"
                     class="select select-bordered select-sm text-xs sm:text-base flex-1 sm:flex-none">
-                    <option v-for="y in yearOptions" :key="y" :value="y">{{ y }}</option>
+                    <option v-for="y in yearOptions" :key="y" :value="y">{{ y + 543 }}</option>
                 </select>
                 <button class="btn btn-primary btn-sm" @click="openCreateModal">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
