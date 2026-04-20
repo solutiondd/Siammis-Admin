@@ -25,8 +25,8 @@
                         class="w-full h-full object-contain" />
                 </div>
                 <div v-show="isExpanded" class="transition-opacity duration-300">
-                    <h2 class="text-lg font-bold text-primary whitespace-nowrap">โรงเรียนจักรคำคณาทร</h2>
-                    <p class="text-sm text-secondary font-medium whitespace-nowrap">จังหวัดลำพูน</p>
+                    <h2 class="text-lg font-bold text-primary whitespace-nowrap">โรงเรียนนานาชาติสยาม</h2>
+                    <p class="text-sm text-secondary font-medium whitespace-nowrap">จังหวัดปทุมธานี</p>
                 </div>
             </div>
         </div>
