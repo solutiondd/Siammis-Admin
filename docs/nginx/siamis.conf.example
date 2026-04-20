@@ -3,7 +3,7 @@ server {
     listen [::]:80;
     server_name your-domain.com;
 
-    root /var/www/siamis;
+    root /var/www/siamisadmin;
     index index.html;
 
     location / {
