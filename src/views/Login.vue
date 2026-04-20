@@ -4,12 +4,12 @@
             <div class="card bg-base-100 shadow-xl animate-form">
                 <div class="card-body p-4 sm:p-6">
                     <div class="flex flex-col items-center mb-4 animate-logo">
-                        <img :src="logoUrl" alt="Chakkam Khanathon School Logo" class="school-logo mb-2" />
+                        <img :src="logoUrl" alt="Siam International School Logo" class="school-logo mb-2" />
                         <h2 class="school-title text-blue-900 font-bold text-xl sm:text-2xl text-center drop-shadow">
-                            โรงเรียนจักรคำคณาทร
+                            โรงเรียนนานาชาติสยาม
                         </h2>
                         <div class="text-blue-900 font-medium text-base sm:text-lg text-center drop-shadow mb-1">
-                            จังหวัดลำพูน
+                            จังหวัดปทุมธานี
                         </div>
                     </div>
 
@@ -83,7 +83,7 @@ import { useRouter } from 'vue-router'
 import axios from 'axios'
 import { useAuthStore } from '../stores/auth'
 import { UserService } from '../api/User.js'
-import logoUrl from '../assets/Chakkam_Khanathon_School_logo.png'
+import logoUrl from '../assets/Siam_Logo-2048x2048.png'
 import CryptoJS from '../utils/crypto.js'
 
 const router = useRouter()
