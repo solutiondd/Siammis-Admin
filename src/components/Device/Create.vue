@@ -39,6 +39,7 @@
                         <option value="" disabled>เลือกประเภทอุปกรณ์</option>
                         <option value="ipcam">IP Camera</option>
                         <option value="Aifacescan">AI Face CC</option>
+                        <option value="intfacecam">Int Face Cam</option>
                     </select>
                 </div>
 
