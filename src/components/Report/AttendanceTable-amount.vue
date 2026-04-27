@@ -9,11 +9,11 @@
                 </svg>
                 ส่งออก Excel
             </button>
-            <button v-if="role === 'teacher'" class="btn btn-sm btn-primary" :disabled="loadingExportDoc"
+            <!-- <button v-if="role === 'teacher'" class="btn btn-sm btn-primary" :disabled="loadingExportDoc"
                 @click="exportDocxReport">
                 <span v-if="loadingExportDoc" class="loading loading-spinner loading-xs mr-2"></span>
                 เอกสารสรุปการเข้างาน
-            </button>
+            </button> -->
         </div>
         <div class="hidden lg:block bg-base-100 rounded-lg shadow-lg overflow-x-auto">
             <table class="table w-full">

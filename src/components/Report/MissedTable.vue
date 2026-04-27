@@ -1,9 +1,9 @@
 <template>
     <div class="flex justify-end mb-2 gap-2">
-        <button v-if="role === 'teacher' && !hideExport" class="btn btn-sm btn-primary" :disabled="loadingExportDoc"
+        <!-- <button v-if="role === 'teacher' && !hideExport" class="btn btn-sm btn-primary" :disabled="loadingExportDoc"
             @click="exportDocxLeaveReport">
             เอกสารสรุปการออกงาน
-        </button>
+        </button> -->
         <button v-if="!hideExport" class="btn btn-sm btn-success" :disabled="loadingExport"
             @click="exportMissedToExcel">
             <span v-if="loadingExport" class="loading loading-spinner loading-xs mr-2"></span>
